@@ -7,14 +7,25 @@ use Moose;
 
 use DuckFeet::Schema;
 
-has importer => (
-    is => 'ro',
+with 'MooseX::Role::BuildInstanceOf' => {
+    target => '::Importer',
+    inherited_args => [ 'schema' ],
+};
+
+has '+importer' => ( 
+    handles => [ qw/ import_file /],
 );
 
 with 'MooseX::Role::BuildInstanceOf' => {
     target => '::Schema',
     constructor => 'connect',
 };
+
+has '+schema' => (
+    handles => {
+        deploy_schema => 'deploy',
+    },
+);
 
 
 

@@ -9,7 +9,7 @@ my $duck = DuckFeet->new(
     schema_args => [ 'dbi:SQLite:duck.db' ],
 );
 
-$duck->deploy_database;
+$duck->deploy_schema;
 
 $duck->import_file( 't/data/access_log', only_new => 1 );
 
