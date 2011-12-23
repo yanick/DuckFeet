@@ -11,6 +11,6 @@ my $duck = DuckFeet->new(
 
 $duck->deploy_schema;
 
-$duck->import_file( 't/data/access_log', only_new => 1 );
+$duck->import_file( 't/data/access_log' );
 
 

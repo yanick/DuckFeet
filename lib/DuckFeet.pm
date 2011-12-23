@@ -6,10 +6,11 @@ use warnings;
 use Moose;
 
 use DuckFeet::Schema;
+use Log::Dispatchouli;
 
 with 'MooseX::Role::BuildInstanceOf' => {
     target => '::Importer',
-    inherited_args => [ 'schema' ],
+    inherited_args => [ qw/ schema logger / ],
 };
 
 has '+importer' => ( 
@@ -27,7 +28,17 @@ has '+schema' => (
     },
 );
 
-
+has logger => (
+    isa => 'Log::Dispatchouli',
+    is => 'ro',
+    default => sub {
+        Log::Dispatchouli->new({
+            ident     => 'duckfeet',
+            to_stderr => 1,
+            debug => 1,
+        });
+    },
+);
 
 __PACKAGE__->meta->make_immutable;
 
