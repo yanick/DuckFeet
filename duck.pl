@@ -11,6 +11,10 @@ my $duck = DuckFeet->new(
 
 $duck->deploy_schema;
 
+# we have a need for speed
+$duck->schema->storage->dbh->do( 'PRAGMA journal_mode=WAL' );
+$duck->schema->storage->dbh->do( 'PRAGMA synchronous = OFF' );
+
 $duck->import_file( 't/data/access_log' );
 
 

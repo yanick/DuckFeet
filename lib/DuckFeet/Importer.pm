@@ -1,5 +1,7 @@
 package DuckFeet::Importer;
 
+use 5.10.0;
+
 use strict;
 use warnings;
 
@@ -44,6 +46,18 @@ my %month = (
     Dec => 12,
 );
 
+method uri_id ( :$protocol, :$method, :$path ) {
+    state %cache;
+
+    my $key = join ':', $protocol, $method, $path;
+
+    return $cache{$key} ||= $self->schema->resultset('Uri')->find_or_create({
+        protocol => $protocol,
+        method   => $method,
+        path     => $path
+    })->uri_id;
+}
+
 method import_entry ( $line ) {
 
     my $log = $self->parser;
@@ -52,18 +66,20 @@ method import_entry ( $line ) {
 
     my $db = $self->schema;
 
-    my $uri = $db->resultset('Uri')->find_or_create({
+    my $uri_id = $self->uri_id(
         protocol => $log->protocol,
         method   => $log->method,
         path     => $log->path
-    });
+    );
 
 
     my $host = $db->resultset('Host')->find_or_create({
             host_identifier  => $log->remote_host 
     });
 
-    my $hit = $db->resultset('Hit')->new_result({ uri_id => $uri->id });
+    my $hit = $db->resultset('Hit')->new_result({});
+    
+    $hit->uri_id($uri_id);
 
     $hit->host( $host );
     $hit->timestamp( 
@@ -99,7 +115,6 @@ method import_entry ( $line ) {
 }
 
 method import_file ( $filename, :$only_new = 0 ) {
-
     my $db = $self->schema;
 
     my $log = $self->parser;
@@ -114,6 +129,7 @@ method import_file ( $filename, :$only_new = 0 ) {
             time - $start, $nbr_entries / ( time - $start or 1 ) ] );
 
         $self->import_entry( $_ );
+        last if $nbr_entries == 100;
     }
 }
 
