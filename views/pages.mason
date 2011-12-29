@@ -1,0 +1,23 @@
+<html>
+<head>
+</head>
+<body>
+<table>
+<thead>
+<tr><th>protocol</th><th>method</th><th>path</th><th>hits</th></tr>
+</thead>
+<tbody>
+% for my $p ( @pages ) {
+<tr>
+% for my $k ( qw/ protocol method path nbr_hits / ) {
+<td><% $p->{$k} %></td>
+% }
+</tr>
+% }
+</tbody>
+</table>
+</body>
+</html> 
+<%args>
+@pages
+</%args>

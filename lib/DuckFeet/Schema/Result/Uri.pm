@@ -28,6 +28,8 @@ column protocol => {
     is_nullable => 0,
 };
 
+has_many hits => 'DuckFeet::Schema::Result::Hit',
+    'uri_id';
 
 1;
 
