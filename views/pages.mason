@@ -1,7 +1,14 @@
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="/datatable/css/demo_page.css">
+<link rel="stylesheet" type="text/css" href="/datatable/css/demo_table.css">
+<script type="text/javascript" src="/datatable/js/jquery.js"></script>
+<script type="text/javascript" src="/datatable/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
+<script>$(function(){
+    $('table').dataTable({ "bPaginate": false });
+});</script>
 <table>
 <thead>
 <tr><th>protocol</th><th>method</th><th>path</th><th>hits</th></tr>
