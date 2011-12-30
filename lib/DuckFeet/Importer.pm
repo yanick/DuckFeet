@@ -129,7 +129,6 @@ method import_file ( $filename, :$only_new = 0 ) {
             time - $start, $nbr_entries / ( time - $start or 1 ) ] );
 
         $self->import_entry( $_ );
-        last if $nbr_entries == 100;
     }
 }
 
